@@ -191,6 +191,7 @@ pub enum Shell {
     Fig,
     /// Friendly Interactive SHell (fish)
     Fish,
+    #[cfg(feature = "nushell")]
     /// Nushell
     Nushell,
     /// PowerShell
@@ -210,6 +211,7 @@ impl clap_complete::Generator for Shell {
 
             Self::Fig => clap_complete_fig::Fig.file_name(name),
 
+            #[cfg(feature = "nushell")]
             Self::Nushell => clap_complete_nushell::Nushell.file_name(name),
         }
     }
@@ -224,6 +226,7 @@ impl clap_complete::Generator for Shell {
 
             Self::Fig => clap_complete_fig::Fig.generate(cmd, buf),
 
+            #[cfg(feature = "nushell")]
             Self::Nushell => clap_complete_nushell::Nushell.generate(cmd, buf),
         }
     }
@@ -270,6 +273,7 @@ impl ValueEnum for Shell {
             Self::Elvish,
             Self::Fig,
             Self::Fish,
+            #[cfg(feature = "nushell")]
             Self::Nushell,
             Self::PowerShell,
             Self::Zsh,
@@ -282,6 +286,7 @@ impl ValueEnum for Shell {
             Self::Elvish => clap::builder::PossibleValue::new("elvish"),
             Self::Fig => clap::builder::PossibleValue::new("fig"),
             Self::Fish => clap::builder::PossibleValue::new("fish"),
+            #[cfg(feature = "nushell")]
             Self::Nushell => clap::builder::PossibleValue::new("nushell"),
             Self::PowerShell => clap::builder::PossibleValue::new("powershell"),
             Self::Zsh => clap::builder::PossibleValue::new("zsh"),
@@ -313,6 +318,7 @@ mod tests {
     fn check_casing_fish() {
         assert_eq!(Shell::Fish.to_possible_value().unwrap().get_name(), "fish");
     }
+    #[cfg(feature = "nushell")]
     #[test]
     fn check_casing_nushell() {
         assert_eq!(
@@ -350,6 +356,7 @@ mod tests {
                 "elvish",
                 "fig",
                 "fish",
+                #[cfg(feature = "nushell")]
                 "nushell",
                 "powershell",
                 "zsh"
