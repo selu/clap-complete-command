@@ -191,6 +191,8 @@ pub enum Shell {
     Fig,
     /// Friendly Interactive SHell (fish)
     Fish,
+    /// Nushell
+    Nushell,
     /// PowerShell
     PowerShell,
     /// Z SHell (zsh)
@@ -207,6 +209,8 @@ impl clap_complete::Generator for Shell {
             Self::Zsh => clap_complete::Shell::Zsh.file_name(name),
 
             Self::Fig => clap_complete_fig::Fig.file_name(name),
+
+            Self::Nushell => clap_complete_nushell::Nushell.file_name(name),
         }
     }
 
@@ -219,6 +223,8 @@ impl clap_complete::Generator for Shell {
             Self::Zsh => clap_complete::Shell::Zsh.generate(cmd, buf),
 
             Self::Fig => clap_complete_fig::Fig.generate(cmd, buf),
+
+            Self::Nushell => clap_complete_nushell::Nushell.generate(cmd, buf),
         }
     }
 }
@@ -264,6 +270,7 @@ impl ValueEnum for Shell {
             Self::Elvish,
             Self::Fig,
             Self::Fish,
+            Self::Nushell,
             Self::PowerShell,
             Self::Zsh,
         ]
@@ -275,6 +282,7 @@ impl ValueEnum for Shell {
             Self::Elvish => clap::builder::PossibleValue::new("elvish"),
             Self::Fig => clap::builder::PossibleValue::new("fig"),
             Self::Fish => clap::builder::PossibleValue::new("fish"),
+            Self::Nushell => clap::builder::PossibleValue::new("nushell"),
             Self::PowerShell => clap::builder::PossibleValue::new("powershell"),
             Self::Zsh => clap::builder::PossibleValue::new("zsh"),
         })
@@ -306,6 +314,13 @@ mod tests {
         assert_eq!(Shell::Fish.to_possible_value().unwrap().get_name(), "fish");
     }
     #[test]
+    fn check_casing_nushell() {
+        assert_eq!(
+            Shell::Nushell.to_possible_value().unwrap().get_name(),
+            "nushell"
+        );
+    }
+    #[test]
     fn check_casing_powershell() {
         assert_eq!(
             Shell::PowerShell.to_possible_value().unwrap().get_name(),
@@ -330,7 +345,15 @@ mod tests {
         assert_eq!(names, sorted);
         assert_eq!(
             names,
-            vec!["bash", "elvish", "fig", "fish", "powershell", "zsh"],
+            vec![
+                "bash",
+                "elvish",
+                "fig",
+                "fish",
+                "nushell",
+                "powershell",
+                "zsh"
+            ],
         );
     }
 }
